@@ -6,29 +6,33 @@ import sys
 def main():
 
     if (len(sys.argv) < 2):
-        print("specify filename")
-        exit()
-
-    #TODO exit gracefully if file not found
+        sys.exit("Please specify a filename")
 
     filename = sys.argv[1];
-    img = Image.open(filename)
+    try :
+        img = Image.open(filename)
+    except FileNotFoundError:
+        exit("Sorry, that file not found")
+    except OSError:
+        exit("Can't read that file as an image")
+
+    ascii(img)
+
+
+def ascii(img):
 
     h = img.height    #Height & width of original image, in pixels
     w = img.width
 
-    ascii = ""  #Will contain our ascii picture
+    ascii = ""  #Will contain our ascii picture; a string of characters
 
-    y_boxes = 35   #Since displaying in terminal, will make picture 35 lines tall.
+    lines = 35
 
-    y_box_pix = int(h / 35)     #How many pixels on one line?
+    y_boxes = lines   #Since displaying in terminal, will make picture 35 lines tall.
+    y_box_pix = int(h / lines)     #How many pixels on one line?
 
-
-    x_boxes = int(w / y_box_pix) * 2  #Use two characters
-
+    x_boxes = int(w / y_box_pix) * 2  #Use twice as many characters for length as height
     x_box_pix = int(y_box_pix / 2) #And half as many pixels
-
-    #print("horiz, vert, boxpix",  w, h, x_boxes, y_boxes, x_box_pix, y_box_pix)
 
     #Loop over all of the boxes....
 
@@ -61,13 +65,15 @@ def main():
 
 def avg_col(colors):
 
-    #Example of colors:
+    #Example of colors; a list of ( frequency, (r,g,b) ) tuples of the most popular colors in this image;
+    #the frequencies seem to be normalized to add up to 16.
+
     # [(2, (124, 84, 33)), (5, (125, 83, 33)), (3, (126, 82, 33)), (4, (124, 82, 32)), (2, (125, 81, 32))]
 
     if colors is None:
         return 0;
 
-    #Find most popular color. Turn it to greyscale. Return greyscale value - between 0-255.
+    #Find most popular color. Turn it to grayscale. Return grayscale value, between 0-255.
     mostpopindex = 0
     occurance = colors[0][0]
     for c in range(len(colors)):
@@ -76,9 +82,16 @@ def avg_col(colors):
             mostpopindex = c
 
     pop_color = colors[mostpopindex][1]
-    grey = 0.2989 * pop_color[0] + 0.5870 * pop_color[1] + 0.1140 * pop_color[2]  #http://stackoverflow.com/questions/12201577/how-can-i-convert-an-rgb-image-into-grayscale-in-python
 
-    return grey;
+    return color_to_gray(pop_color)
+
+
+def color_to_gray(color):
+
+    gray = 0.2989 * color[0] + 0.5870 * color[1] + 0.1140 * color[2]
+    #http://stackoverflow.com/questions/687261/converting-rgb-to-grayscale-intensity
+
+    return gray;
 
 
 def ascii_pix(color):
@@ -88,12 +101,10 @@ def ascii_pix(color):
 
     val = 255-color;
 
-    #print(val)
-
     index = int(val/32)
 
     #val in range 0-255. We only have 8 different pixels.
-    #Divide grey by 32 to reduce range to 0-7.
+    #Divide gray by 32 to reduce range to 0-7.
 
     #Can edit this to create alternate palette of characters.
     #Characters arranged from 'light' to 'dark'.
@@ -109,7 +120,6 @@ def ascii_pix(color):
     ]
 
     return ascii_pixels[index];
-
 
 
 main()
