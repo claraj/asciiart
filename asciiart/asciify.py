@@ -14,7 +14,7 @@ def main():
     except FileNotFoundError:
         exit("Sorry, that file not found")
     except OSError:
-        exit("Can't read that file as an image")
+        exit("That file doesn't seem to be an image")
 
     ascii(img)
 
@@ -122,4 +122,14 @@ def ascii_pix(color):
     return ascii_pixels[index];
 
 
-main()
+
+if __name__ == '__main__':
+    #Running this as a script: call the main method.
+    main()
+else:
+    #Importing this module from somewhere else; for example, a test case
+    #Without this, the main method would be run when the module is imported into the
+    #test case, which is probably not the behavior you want,
+    #You probably don't need the else clause for this if statment
+    #but I added it so I had somewhere to write this comment.
+    pass
