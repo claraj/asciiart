@@ -50,11 +50,14 @@ def ascii(img):
 
             colors = cropbox.getcolors()   #Extract colors as "an unsorted list of count, pixel values"
 
-            #Identify most popular color in this box; we'll call this "average" color
+            #Identify most popular RGB color in this box; we'll call this "average" color
             avg = avg_col(colors);
 
+            #Turn this color into a grayscale color - a single number in range 0-255
+            gray = color_to_gray(avg)
+
             #And transform this average color into one of our ASCII character 'pixels'
-            pixel = ascii_pix(avg)
+            pixel = ascii_pix(gray)
 
             ascii += pixel
 
@@ -83,7 +86,7 @@ def avg_col(colors):
 
     pop_color = colors[mostpopindex][1]
 
-    return color_to_gray(pop_color)
+    return pop_color
 
 
 def color_to_gray(color):
@@ -91,7 +94,28 @@ def color_to_gray(color):
     gray = 0.2989 * color[0] + 0.5870 * color[1] + 0.1140 * color[2]
     #http://stackoverflow.com/questions/687261/converting-rgb-to-grayscale-intensity
 
-    return gray;
+    #make sure in range 0 to 255.
+
+    if gray < 0:
+        return 0
+    if gray > 255:
+        return 255
+
+    return int(gray);
+
+
+    #Can edit this to create alternate palette of characters.
+    #Characters arranged from 'light' to 'dark'.
+ascii_pixels = [
+        ' ',
+        '.',
+        '~',
+        '/',
+        '*',
+        '0',
+        '#',
+        '@'
+    ]
 
 
 def ascii_pix(color):
@@ -105,19 +129,6 @@ def ascii_pix(color):
 
     #val in range 0-255. We only have 8 different pixels.
     #Divide gray by 32 to reduce range to 0-7.
-
-    #Can edit this to create alternate palette of characters.
-    #Characters arranged from 'light' to 'dark'.
-    ascii_pixels = [
-        ' ',
-        '.',
-        '~',
-        '/',
-        '*',
-        '0',
-        '#',
-        '@'
-    ]
 
     return ascii_pixels[index];
 
