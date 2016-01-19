@@ -19,14 +19,14 @@ class AsciifyTest(unittest.TestCase):
         # TODO
 
         expected = asc.avg_col([(2, (124, 84, 33)), (5, (125, 83, 33)), (3, (126, 82, 33)), (4, (124, 82, 32)), (2, (125, 81, 32))])
-        self.assertEquals(expected, (125,83,33))
+        self.assertEqual(expected, (125,83,33))
 
 
     def test_color_to_gray(self):
 
         colorvals = [ (0, 0, 0), (-10, -10, -10), (150, 170, 255), (600, 600, 600)]
 
-        for col in colorvals:
+        for val in colorvals:
             g = asc.color_to_gray(col)
             self.assertTrue(g >=0 and g <= 255)
 
@@ -34,9 +34,11 @@ class AsciifyTest(unittest.TestCase):
 
     def test_ascii_pix(self):
 
-        #Make sure it is returning a single character from the pallete
-
-        assertEqual(asc.pallete[0] == ascii_pix(0))
+        #Testing the appropriate character is being returned...
+        self.assertEqual(asc.ascii_pixels[0], asc.ascii_pix(255) , '1')
+        self.assertEqual(asc.ascii_pixels[2], asc.ascii_pix(190) , '2')
+        self.assertEqual(asc.ascii_pixels[4], asc.ascii_pix(110) , '3')
+        self.assertEqual(asc.ascii_pixels[7], asc.ascii_pix(2) , '4')
 
         pass
 
