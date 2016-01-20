@@ -1,4 +1,4 @@
-import setuptools
+from setuptools import setup
 
 setup(name='AsciiArt',
     version='0.1.dev',
