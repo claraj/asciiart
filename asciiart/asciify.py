@@ -91,8 +91,9 @@ def avg_col(colors):
 
 def color_to_gray(color):
 
-    gray = 0.2989 * color[0] + 0.5870 * color[1] + 0.1140 * color[2]
+    gray = 0.3 * color[0] + 0.6 * color[1] + 0.1 * color[2]
     #http://stackoverflow.com/questions/687261/converting-rgb-to-grayscale-intensity
+    #Rounded to nearest 0.1, it doesn't matter if we are not perfectly accurate
 
     #make sure in range 0 to 255.
 
