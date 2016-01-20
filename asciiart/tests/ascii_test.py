@@ -1,13 +1,7 @@
 import unittest
-import os
-import sys
 
-#sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
-#import asciiart
 import asciiart
 from asciiart import asciify as asc
-
-#from asciiart import asciify
 
 
 class AsciifyTest(unittest.TestCase):
