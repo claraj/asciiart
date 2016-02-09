@@ -74,9 +74,9 @@ def avg_col(colors):
     # [(2, (124, 84, 33)), (5, (125, 83, 33)), (3, (126, 82, 33)), (4, (124, 82, 32)), (2, (125, 81, 32))]
 
     if colors is None:
-        return 0;
+        return (0, 0, 0);
 
-    #Find most popular color. Turn it to grayscale. Return grayscale value, between 0-255.
+    
     mostpopindex = 0
     occurance = colors[0][0]
     for c in range(len(colors)):
