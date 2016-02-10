@@ -50,8 +50,6 @@ def ascii(img):
             right = left + x_box_pix
             lower = upper + y_box_pix
 
-            print((left, upper, min(right, w-1), min(lower, h-1)))
-
             #Crop this box and return as new image.
             #The min calls are to constrain the right/lower corner of box within the dimensions
             #of the image.
@@ -74,7 +72,7 @@ def ascii(img):
 
     print(ascii)
 
-
+ 
 def avg_col(colors):
 
     #Example of colors; a list of ( frequency, (r,g,b) ) tuples of the most popular colors in this image;
