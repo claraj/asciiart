@@ -6,7 +6,9 @@ from asciiart import asciify as asc
 
 class AsciifyTest(unittest.TestCase):
 
+
     def test_avg_color(self):
+
 
         #list of colors are in the format: (frequency, RGBcolor)
         # [(2, (124, 84, 33)), (5, (125, 83, 33)), (3, (126, 82, 33)), (4, (124, 82, 32)), (2, (125, 81, 32))]

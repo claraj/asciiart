@@ -1,6 +1,7 @@
 from PIL import Image
 import sys
 
+
 #Open file
 
 def main():
@@ -24,7 +25,7 @@ def ascii(img):
     h = img.height    #Height & width of original image, in pixels
     w = img.width
 
-    ascii = ""  #Will contain our ascii picture; a string of characters
+    ascii = ""  #Will contain our ascii picture; a string of characters with newlines in.
 
     lines = 35
 
@@ -33,6 +34,10 @@ def ascii(img):
 
     x_boxes = int(w / y_box_pix) * 2  #Use twice as many characters for length as height
     x_box_pix = int(y_box_pix / 2) #And half as many pixels
+
+    if x_box_pix < 1 or y_box_pix < 1 :
+        print("Too many lines, try a smaller number.")
+        return
 
     #Loop over all of the boxes....
 
@@ -45,8 +50,12 @@ def ascii(img):
             right = left + x_box_pix
             lower = upper + y_box_pix
 
+            print((left, upper, min(right, w-1), min(lower, h-1)))
+
             #Crop this box and return as new image.
-            cropbox = img.crop((left, upper, right, lower));
+            #The min calls are to constrain the right/lower corner of box within the dimensions
+            #of the image.
+            cropbox = img.crop((left, upper, min(right, w-1), min(lower, h-1)));
 
             colors = cropbox.getcolors()   #Extract colors as "an unsorted list of count, pixel values"
 
@@ -73,12 +82,17 @@ def avg_col(colors):
 
     # [(2, (124, 84, 33)), (5, (125, 83, 33)), (3, (126, 82, 33)), (4, (124, 82, 32)), (2, (125, 81, 32))]
 
-    if colors is None:
-        return (0, 0, 0);
+    unknown = (0, 0, 0)
 
-    
+    if colors is None:
+        return unknown  #If any part of the cropbox boundary is outside the image, colors will be None.
+    if len(colors) == 0:
+        return unknown
+
     mostpopindex = 0
+
     occurance = colors[0][0]
+
     for c in range(len(colors)):
         if colors[c][0] > occurance:
             occurance = colors[c][0]
