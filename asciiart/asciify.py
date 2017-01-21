@@ -1,15 +1,30 @@
 from PIL import Image
 import sys
+import os
 
+    #Can edit this to create alternate palette of characters.
+    #Characters arranged from 'light' to 'dark'.
+ascii_pixels = [
+        ' ',
+        '.',
+        '-',
+        '~',
+        '"',
+        '*',
+        '#',
+        '@'
+    ]
 
-#Open file
+def ascii_art(filename=None):
 
-def main():
+    if filename is None:
+        if (len(sys.argv) < 2):
+            sys.exit("Please specify a filename")
 
-    if (len(sys.argv) < 2):
-        sys.exit("Please specify a filename")
+        filename = sys.argv[1];
 
-    filename = sys.argv[1];
+    lines = 35
+
     try :
         img = Image.open(filename)
     except FileNotFoundError:
@@ -17,17 +32,19 @@ def main():
     except OSError:
         exit("That file doesn't seem to be an image")
 
-    ascii(img)
+    art = ascii(img, lines)
+
+    write_to_file(art, filename)
 
 
-def ascii(img):
+def ascii(img, lines):
 
     h = img.height    #Height & width of original image, in pixels
     w = img.width
 
     ascii = ""  #Will contain our ascii picture; a string of characters with newlines in.
 
-    lines = 35
+    #lines = 35
 
     y_boxes = lines   #Since displaying in terminal, will make picture 35 lines tall.
     y_box_pix = int(h / lines)     #How many pixels on one line?
@@ -71,8 +88,9 @@ def ascii(img):
         ascii += '\n'
 
     print(ascii)
+    return ascii
 
- 
+
 def avg_col(colors):
 
     #Example of colors; a list of ( frequency, (r,g,b) ) tuples of the most popular colors in this image;
@@ -117,19 +135,6 @@ def color_to_gray(color):
     return int(gray);
 
 
-    #Can edit this to create alternate palette of characters.
-    #Characters arranged from 'light' to 'dark'.
-ascii_pixels = [
-        ' ',
-        '.',
-        '~',
-        '/',
-        '*',
-        '0',
-        '#',
-        '@'
-    ]
-
 
 def ascii_pix(color):
 
@@ -146,14 +151,42 @@ def ascii_pix(color):
     return ascii_pixels[index];
 
 
+def write_to_file(art, filename):
+
+    # Split into filename and path; add ASCII_ prefix to file name
+    dir_name, file_name = os.path.split(filename)
+
+    # Remove extension, if present - replace with .txt
+    base, extension = os.path.splitext(file_name)
+    file_name = base + '.txt'
+
+    file_name = "ASCII_" + file_name
+
+    filepath = os.path.join(dir_name, file_name)
+
+    # Does this file exist?
+
+    if os.path.isfile(filepath):
+        # File already exists
+        print('Did not write art to file - file already exists')
+        return
+
+    with open(filepath, 'w') as f:
+        f.write(art)
+
+
+def main():
+    ascii_art()
+
 
 if __name__ == '__main__':
     #Running this as a script: call the main method.
     main()
+
 else:
     #Importing this module from somewhere else; for example, a test case
     #Without this, the main method would be run when the module is imported into the
     #test case, which is probably not the behavior you want,
-    #You probably don't need the else clause for this if statment
+    #You don't need the else clause for this if statment
     #but I added it so I had somewhere to write this comment.
     pass
